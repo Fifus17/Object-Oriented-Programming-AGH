@@ -1,11 +1,11 @@
 package agh.ics.oop;
 
-public class Direction {
-    enum Directon {
+
+    enum Direction {
         FORWARD,
         BACKWARD,
         RIGHT,
         LEFT,
         NULL
     }
-}
+

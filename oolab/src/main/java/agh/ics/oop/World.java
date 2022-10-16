@@ -4,30 +4,21 @@ public class World {
     public static void main(String[] args) {
         System.out.println("system wystartował");
         System.out.println();
-        Direction.Directon[] array = new Direction.Directon[args.length];
+        Direction[] array = new Direction[args.length];
         for(int i=0; i < args.length; i++) {
-            switch(args[i]) {
-                case "f":
-                    array[i] = Direction.Directon.FORWARD;
-                    break;
-                case "b":
-                    array[i] = Direction.Directon.BACKWARD;
-                    break;
-                case "r":
-                    array[i] = Direction.Directon.RIGHT;
-                    break;
-                case "l":
-                    array[i] = Direction.Directon.LEFT;
-                    break;
-                default:
-                    array[i] = Direction.Directon.NULL;
+            switch (args[i]) {
+                case "f" -> array[i] = Direction.FORWARD;
+                case "b" -> array[i] = Direction.BACKWARD;
+                case "r" -> array[i] = Direction.RIGHT;
+                case "l" -> array[i] = Direction.LEFT;
+                default -> array[i] = Direction.NULL;
             }
         }
         run(array);
         System.out.println();
         System.out.println("system zakończył działanie");
     }
-    public static void run(Direction.Directon[] args) {
+    public static void run(Direction[] args) {
         /* Points 11-13
         for(int i = 0; i < args.length - 1; i++) {
             System.out.print(args[i] + ", ");
@@ -46,7 +37,7 @@ public class World {
             };
              if(message != null) System.out.println(message);
         } */
-        for(Direction.Directon argument: args) {
+        for(Direction argument: args) {
             String message = switch (argument) {
                 case FORWARD -> "Zwierzak idzie do przodu";
                 case BACKWARD -> "Zwierzak idzie do tyłu";
