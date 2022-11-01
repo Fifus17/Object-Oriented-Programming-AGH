@@ -3,10 +3,28 @@ package agh.ics.oop;
 
 public class Animal {
     private MapDirection orientation = MapDirection.NORTH;
+    private IWorldMap map;
     private Vector2d position = new Vector2d(2, 2);
 
+    public Animal() { this.position = new Vector2d(2, 2); }
+
+    public Animal(IWorldMap map){
+        this.map = map;
+    }
+
+    public Animal(IWorldMap map, Vector2d initialPosition) {
+        this.map = map;
+        this.position = initialPosition;
+    }
+
     public String toString() {
-        return "(%s, %s)".formatted(this.position.toString(), this.orientation.toString());
+        switch (this.orientation) {
+            case NORTH: return "N";
+            case SOUTH: return "S";
+            case EAST: return "E";
+            case WEST: return "W";
+        }
+        return "";
     }
 
     public boolean isAt(Vector2d position) {
@@ -14,27 +32,35 @@ public class Animal {
         else return false;
     }
 
+    public Vector2d getPosition() {
+        return this.position;
+    }
+
+    public MapDirection getOrientation() {
+        return this.orientation;
+    }
+
     public void move(MoveDirection direction) {
         switch (direction) {
             case FORWARD: switch (this.orientation) {
-                case NORTH: if(new Vector2d(4, 3).precedes(this.position)) this.position = this.position.add(new Vector2d(0, 1));
+                case NORTH: if(this.map.canMoveTo(this.position.add(new Vector2d(0, 1)))) this.position = this.position.add(new Vector2d(0, 1));
                 break;
-                case EAST: if(new Vector2d(3, 4).precedes(this.position)) this.position = this.position.add(new Vector2d(1, 0));
+                case EAST: if(this.map.canMoveTo(this.position.add(new Vector2d(1, 0)))) this.position = this.position.add(new Vector2d(1, 0));
                 break;
-                case SOUTH: if(new Vector2d(0, 1).follows(this.position)) this.position = this.position.add(new Vector2d(0, -1));
+                case SOUTH: if(this.map.canMoveTo(this.position.add(new Vector2d(0, -1)))) this.position = this.position.add(new Vector2d(0, -1));
                 break;
-                case WEST: if(new Vector2d(1, 0).follows(this.position)) this.position = this.position.add(new Vector2d(-1, 0));
+                case WEST: if(this.map.canMoveTo(this.position.add(new Vector2d(-1, 0)))) this.position = this.position.add(new Vector2d(-1, 0));
                 break;
             }
             break;
             case BACKWARD: switch (this.orientation) {
-                case NORTH: if(new Vector2d(1, 1).follows(this.position)) this.position = this.position.subtract(new Vector2d(0, 1));
+                case NORTH: if(this.map.canMoveTo(this.position.subtract(new Vector2d(0, 1)))) this.position = this.position.subtract(new Vector2d(0, 1));
                 break;
-                case EAST: if(new Vector2d(1, 1).follows(this.position)) this.position = this.position.subtract(new Vector2d(1, 0));
+                case EAST: if(this.map.canMoveTo(this.position.subtract(new Vector2d(1, 0)))) this.position = this.position.subtract(new Vector2d(1, 0));
                 break;
-                case SOUTH: if(new Vector2d(4, 3).precedes(this.position)) this.position = this.position.subtract(new Vector2d(0, -1));
+                case SOUTH: if(this.map.canMoveTo(this.position.subtract(new Vector2d(0, -1)))) this.position = this.position.subtract(new Vector2d(0, -1));
                 break;
-                case WEST: if(new Vector2d(3, 4).precedes(this.position)) this.position = this.position.subtract(new Vector2d(-1, 0));
+                case WEST: if(this.map.canMoveTo(this.position.subtract(new Vector2d(-1, 0)))) this.position = this.position.subtract(new Vector2d(-1, 0));
                 break;
             }
             break;

@@ -2,17 +2,11 @@ package agh.ics.oop;
 
 public class World {
     public static void main(String[] args) {
-        Animal giraffe = new Animal();
-        System.out.println(giraffe.toString());
-        OptionsParser instructions = new OptionsParser();
-        //MoveDirection[] moves = instructions.parse(args);  Steering with main arguments
-        String[] testString = {"", "b", "backward", "b", "b", "l", "f", "f", "f", "right", "f", "f"}; // Steering with pre-made array
-        MoveDirection[] moves = instructions.parse(testString);
-        for(MoveDirection move: moves) {
-            giraffe.move(move);
-            System.out.println(giraffe.toString());
-        }
-        System.out.println(giraffe.toString());
+        MoveDirection[] directions = new OptionsParser().parse(args);
+        IWorldMap map = new RectangularMap(10, 5);
+        Vector2d[] positions = { new Vector2d(2,2), new Vector2d(3,4) };
+        IEngine engine = new SimulationEngine(directions, map, positions);
+        engine.run();
     }
 }
 
