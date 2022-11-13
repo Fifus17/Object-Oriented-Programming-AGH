@@ -5,7 +5,6 @@ import java.util.*;
 public class GrassField extends AbstractWorldMap{
     private final int numOfGrassFields;
     private final MapVisualizer visualizer = new MapVisualizer(this);
-    private final List<Animal> animals = new ArrayList<>();
     private final List<Grass> grassFields = new ArrayList<>();
 
     public GrassField (int number) {
@@ -36,11 +35,12 @@ public class GrassField extends AbstractWorldMap{
         Vector2d min = new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE);
         Vector2d max = new Vector2d(Integer.MIN_VALUE, Integer.MIN_VALUE);
         Vector2d[] result = {min, max};
-        for (Animal animal: animals) {
-            if(animal.getPosition().x > max.x) max = new Vector2d(animal.getPosition().x, max.y);
-            if(animal.getPosition().y > max.y) max = new Vector2d(max.x, animal.getPosition().y);
-            if(animal.getPosition().x < min.x) min = new Vector2d(animal.getPosition().x, min.y);
-            if(animal.getPosition().y < min.y) min = new Vector2d(min.x, animal.getPosition().y);
+        for (Map.Entry<Vector2d, Animal> set :
+                animals.entrySet()) {
+            if(set.getValue().getPosition().x > max.x) max = new Vector2d(set.getValue().getPosition().x, max.y);
+            if(set.getValue().getPosition().y > max.y) max = new Vector2d(max.x, set.getValue().getPosition().y);
+            if(set.getValue().getPosition().x < min.x) min = new Vector2d(set.getValue().getPosition().x, min.y);
+            if(set.getValue().getPosition().y < min.y) min = new Vector2d(min.x, set.getValue().getPosition().y);
         }
         for (Grass grass: grassFields) {
             if(grass.getPosition().x > max.x) max = new Vector2d(grass.getPosition().x, max.y);
@@ -53,20 +53,10 @@ public class GrassField extends AbstractWorldMap{
 
     @Override
     public boolean isOccupied(Vector2d position) {
-        for (Animal animal: animals) {
-            if (position.equals(animal.getPosition()))
-                return true;
-        }
-        for (Grass grassFields: grassFields) {
-            if (position.equals(grassFields.getPosition()))
-                return true;
-        }
-        return false;
-    }
-
-    public boolean isOccupiedByAnimal(Vector2d position) {
-        for (Animal animal: animals) {
-            if (position.equals(animal.getPosition()))
+        if (super.isOccupied(position))
+            return true;
+        for (Grass grass : grassFields) {
+            if (position.equals(grass.getPosition()))
                 return true;
         }
         return false;
@@ -96,15 +86,6 @@ public class GrassField extends AbstractWorldMap{
         return false;
     }
 
-    @Override
-    public boolean place(Animal animal) {
-        if (canMoveTo(animal.getPosition())) {
-            animals.add(animal);
-            return true;
-        }
-        return false;
-    }
-
     public boolean place(Grass grass) {
         if (!isOccupied(grass.getPosition())) {
             grassFields.add(grass);
@@ -113,13 +94,13 @@ public class GrassField extends AbstractWorldMap{
         return false;
     }
 
-    @Override
     public Object objectAt(Vector2d position) {
-        for (Animal animal: animals) {
-            if(animal.getPosition().equals(position)) return animal;
+        if (super.objectAt(position) != null) {
+            return super.objectAt(position);
         }
-        for (Grass grass: grassFields) {
-            if(grass.getPosition().equals(position)) return grass;
+        for (Grass grass : grassFields) {
+            if (grass.isAt(position))
+                return grass;
         }
         return null;
     }
