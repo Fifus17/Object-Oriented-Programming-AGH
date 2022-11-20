@@ -2,9 +2,10 @@ package agh.ics.oop;
 
 import java.util.*;
 
-abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
+public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
     protected Map<Vector2d, Animal> animals = new LinkedHashMap<>();
     protected MapVisualizer visualizer = new MapVisualizer(this);
+    protected MapBoundary mapBoundary = new MapBoundary();
     protected Vector2d mapBorderTopRight;
     protected Vector2d mapBorderBottomLeft;
 
@@ -20,12 +21,12 @@ abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
         this.animals.put(newPosition, animal);
     }
 
-    abstract Vector2d[] findPosition();
+//    abstract Vector2d[] findPosition();
 
-    public String toString() {
-        Vector2d[] cords = findPosition();
-        return visualizer.draw(cords[0], cords[1]);
-    }
+//    public String toString() {
+//        Vector2d[] cords = findPosition();
+//        return visualizer.draw(cords[0], cords[1]);
+//    }
 
     public boolean canMoveTo(Vector2d position) {
         return position.precedes(mapBorderBottomLeft) && position.follows(mapBorderTopRight) && !(objectAt(position) instanceof Animal);
@@ -35,9 +36,11 @@ abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
         if (canMoveTo(animal.getPosition())) {
             animals.put(animal.getPosition(), animal);
             animal.addObserver(this);
+            animal.addObserver(mapBoundary);
+            mapBoundary.addElement(animal.getPosition());
             return true;
         }
-        return false;
+        throw new IllegalArgumentException(animal.getPosition() + " is not a valid position to place animal");
     }
 
     public boolean isOccupied(Vector2d position) {
@@ -46,6 +49,14 @@ abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
 
     public Object objectAt(Vector2d position) {
         return animals.get(position);
+    }
+
+    public Vector2d getBottomLeft() {
+        return mapBoundary.getBottomLeft();
+    }
+
+    public Vector2d getTopRight() {
+        return mapBoundary.getTopRight();
     }
 
 }

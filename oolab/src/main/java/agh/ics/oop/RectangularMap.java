@@ -2,51 +2,33 @@ package agh.ics.oop;
 
 import java.util.*;
 
-public class RectangularMap implements IWorldMap{
-    private final Vector2d mapBorderTopRightCord;
-    private final Vector2d mapBorderBottomLeftCord;
-    private final MapVisualizer visualizer;
-    private final List<Animal> animals;
+public class RectangularMap extends AbstractWorldMap{
+    private int width;
+    private int height;
 
     public RectangularMap(int width, int height) {
-        mapBorderBottomLeftCord = new Vector2d(0, 0);
-        mapBorderTopRightCord = new Vector2d(width-1, height-1);
-        this.visualizer = new MapVisualizer(this);
-        this.animals = new ArrayList<>();
+        super(width - 1, height - 1, 0, 0);
+        this.width = width;
+        this.height = height;
     }
 
+    @Override
     public String toString() {
-        return visualizer.draw(mapBorderBottomLeftCord, mapBorderTopRightCord);
+        return visualizer.draw(new Vector2d(0, 0), new Vector2d(width-1, height-1));
     }
 
-    @Override
-    public boolean isOccupied(Vector2d position) {
-        for (Animal animal: animals) {
-            if (position.equals(animal.getPosition()))
-                return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean canMoveTo(Vector2d position) {
-        return position.precedes(mapBorderBottomLeftCord) && position.follows(mapBorderTopRightCord) && !isOccupied(position);
-    }
-
-    @Override
-    public boolean place(Animal animal) {
-        if (canMoveTo(animal.getPosition())) {
-            animals.add(animal);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public Object objectAt(Vector2d position) {
-        for (Animal animal: animals) {
-            if(animal.getPosition().equals(position)) return animal;
-        }
-        return null;
-    }
+    //    @Override
+//    Vector2d[] findPosition() {
+//        Vector2d min = new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE);
+//        Vector2d max = new Vector2d(Integer.MIN_VALUE, Integer.MIN_VALUE);
+//        Vector2d[] result = {min, max};
+//        for (Map.Entry<Vector2d, Animal> set :
+//                animals.entrySet()) {
+//            if(set.getValue().getPosition().x > max.x) max = new Vector2d(set.getValue().getPosition().x, max.y);
+//            if(set.getValue().getPosition().y > max.y) max = new Vector2d(max.x, set.getValue().getPosition().y);
+//            if(set.getValue().getPosition().x < min.x) min = new Vector2d(set.getValue().getPosition().x, min.y);
+//            if(set.getValue().getPosition().y < min.y) min = new Vector2d(min.x, set.getValue().getPosition().y);
+//        }
+//        return result;
+//    }
 }

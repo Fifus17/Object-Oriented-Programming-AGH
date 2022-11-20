@@ -19,10 +19,21 @@ public class GrassFieldTest {
     @Test
     public void placeTest() {
         GrassField map = new GrassField(10);
-        Assertions.assertTrue(map.place(new Animal(map, new Vector2d(-1, -1))), "Negative coords");
-        Assertions.assertFalse(map.place(new Animal(map, new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE))), "Can't place at borders square");
-        Assertions.assertTrue(map.place(new Animal(map, new Vector2d(3, 1))), "Can place at 3,1");
-        Assertions.assertFalse(map.place(new Animal(map, new Vector2d(3, 1))), "Cant place again at 3,1");
+        Assertions.assertTrue(map.place(new Animal(map, new Vector2d(-1, -1))));
+        try{
+            map.place(new Animal(map, new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE)));
+            Assertions.fail("Can't place on borders");
+        }catch(IllegalArgumentException ex){
+            Assertions.assertTrue(true);
+        }
+
+        Assertions.assertTrue(map.place(new Animal(map, new Vector2d(10, 15))));
+        try{
+            map.place(new Animal(map, new Vector2d(10, 15)));
+            Assertions.fail("Can't place on the same spot");
+        }catch(IllegalArgumentException ex){
+            Assertions.assertTrue(true);
+        }
     }
 
     @Test
@@ -43,7 +54,7 @@ public class GrassFieldTest {
     @Test
     public void spawnGrassTest() {
         GrassField map = new GrassField(0);
-        Assertions.assertTrue(map.place(new Grass(new Vector2d(3, 3))));
+        Assertions.assertTrue(map.placeGrass(new Grass(new Vector2d(3, 3))));
         Assertions.assertTrue(map.objectAt(new Vector2d(3, 3)) instanceof Grass);
     }
 
