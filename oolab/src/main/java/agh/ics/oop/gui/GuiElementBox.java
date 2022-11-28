@@ -23,11 +23,11 @@ public class GuiElementBox {
 
     public GuiElementBox() throws FileNotFoundException{
         try{
-            this.imageUp = new Image(new FileInputStream("oolab/src/main/resources/up.png"));
-            this.imageDown = new Image(new FileInputStream("oolab/src/main/resources/down.png"));
-            this.imageRight = new Image(new FileInputStream("oolab/src/main/resources/right.png"));
-            this.imageLeft = new Image(new FileInputStream("oolab/src/main/resources/left.png"));
-            this.imageGrass = new Image(new FileInputStream("oolab/src/main/resources/grass.png"));
+            this.imageUp = new Image(new FileInputStream("oolab/src/main/resources/up.jpg"));
+            this.imageDown = new Image(new FileInputStream("oolab/src/main/resources/down.jpg"));
+            this.imageRight = new Image(new FileInputStream("oolab/src/main/resources/right.jpg"));
+            this.imageLeft = new Image(new FileInputStream("oolab/src/main/resources/left.jpg"));
+            this.imageGrass = new Image(new FileInputStream("oolab/src/main/resources/grass.jpeg"));
 
         } catch (FileNotFoundException ex){
             System.out.println("Couldn't load files -> " + ex);
@@ -38,7 +38,7 @@ public class GuiElementBox {
         Label elementLabel;
         ImageView elementView;
         if (mapElement instanceof Animal) {
-            elementLabel = new Label("Z " + mapElement.getPosition());
+            elementLabel = new Label("A " + mapElement.getPosition());
             elementView = switch (((Animal) mapElement).getOrientation()) {
                 case NORTH -> new ImageView(imageUp);
                 case EAST -> new ImageView(imageRight);
@@ -47,7 +47,7 @@ public class GuiElementBox {
             };
         }
         else{
-            elementLabel = new Label("Trawa");
+            elementLabel = new Label("Grass");
             elementView = new ImageView(imageGrass);
         }
         elementView.setFitWidth(20);
