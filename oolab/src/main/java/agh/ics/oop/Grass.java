@@ -23,4 +23,9 @@ public class Grass extends AbstractWorldMapElement{
     void removeObserver(IPositionChangeObserver observer) {
         this.observers.remove(observer);
     }
+
+    @Override
+    public String getImageName() {
+        return "grass.png";
+    }
 }
